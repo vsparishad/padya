@@ -1,0 +1,10 @@
+id: T04
+title: genuine 8-syllable pāda, no context
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "गणना लघुचेतसाम्"
+expect:
+  verse_count: 0
+  regions_partition: true

@@ -1,0 +1,5 @@
+id: T40
+title: whole-file vs chunked scanning
+status: deferred
+deferred_until: M7
+reason: chunking not built

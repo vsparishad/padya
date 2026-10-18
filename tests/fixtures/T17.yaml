@@ -1,0 +1,5 @@
+id: T17
+title: duplicate alias metre definitions
+status: deferred
+deferred_until: M4
+reason: vṛtta aliases inactive; candidate dedupe covered by T38

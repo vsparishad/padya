@@ -1,0 +1,5 @@
+id: T03
+title: half-verse + इत्यादि
+status: deferred
+deferred_until: M3
+reason: partials need frames (A6/AN-7); BASE-8 accepts zero partials, see test_base8_no_partials

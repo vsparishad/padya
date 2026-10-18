@@ -1,0 +1,11 @@
+id: T02
+title: 32+-syllable prose passage
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "अत्र केचिदाहुः प्रातःकाले स्नानं कृत्वा संध्यावन्दनं कर्तव्यमिति तन्न युक्तम् देशकालादिभेदेन व्यवस्थाया दृष्टत्वात् ।"
+expect:
+  min_syllables: 32
+  verse_count: 0
+  regions_partition: true

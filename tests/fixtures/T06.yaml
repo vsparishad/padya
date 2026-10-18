@@ -1,0 +1,13 @@
+id: T06
+title: pāda boundary inside a word with a consonant cluster
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥"
+expect:
+  verse_count: 1
+  verses:
+    - lg_full: "GGGGLGGG GLGLLGLL GGLLLGGG GGGGLGLL"
+      pada_boundary_resolutions: [exact_between_codepoints, exact_between_codepoints, inside_grapheme]
+  regions_partition: true

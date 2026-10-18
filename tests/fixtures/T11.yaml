@@ -1,0 +1,5 @@
+id: T11
+title: Sanskrit quote inside Hindi commentary
+status: deferred
+deferred_until: M4
+reason: language classifier off until M4

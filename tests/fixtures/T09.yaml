@@ -1,0 +1,5 @@
+id: T09
+title: verse across a page/chunk seam
+status: deferred
+deferred_until: M7
+reason: chunking (OPS-7/8) not built

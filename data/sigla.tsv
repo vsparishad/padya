@@ -1,0 +1,182 @@
+# Citation sigla of the Dharmaśāstra library (IAST editions, T. Lubin / P. Olivelle / SARIT style) and the
+# Devanagari letter-rendering the IAST→Devanagari converter produced for them. action=restore: tools/fix_sigla.py
+# puts the IAST siglum back when the rendering is followed by a number at a line start or inside [ ] ( );
+# action=keep: the rendering is also a real Devanagari word or syllable (मा, वि, सं, मनु …), left untouched.
+# Counts: iast_count = uses in the IAST library; deva_in_context = renderings found in the Devanagari library in a safe context.
+siglum	devanagari	action	iast_count	deva_in_context	contexts	expansion
+MDh	म्ध्	restore	4199	4126		Mānava-dharmaśāstra
+Hem	हेम्	restore	1835	1835		Hemādri
+BDhS	ब्ध्स्	restore	1664	1654		Baudhāyana-dharmasūtra (Olivelle numbering)
+VaDhS	वध्स्	restore	1387	1387		Vasiṣṭha-dharmasūtra
+ĀpDhS	आप्ध्स्	restore	1320	1320		Āpastamba-dharmasūtra
+GDh	ग्ध्	restore	1243	1222		Gautama-dharmasūtra
+YDh	य्ध्	restore	1099	1063		Yājñavalkya-dharmaśāstra
+GDhS-A	ग्ध्स्-अ	restore	1047	1045		Gautama-dharmasūtra (Ānandāśrama numbering)
+GDhS-St	ग्ध्स्-स्त्	restore	1019	965		Gautama-dharmasūtra (Stenzler numbering)
+MP	म्प्	restore	878	878		
+VaDh	वध्	restore	825	806		Vasiṣṭha-dharmasūtra
+ĀpDh	आप्ध्	restore	497	481		Āpastamba-dharmasūtra
+NSm	न्स्म्	restore	442	422		Nārada-smṛti
+VaikhDhS	वैख्ध्स्	restore	412	412		Vaikhānasa-dharmasūtra
+MBh	म्भ्	restore	242	242		Mahābhārata
+RV	र्व्	restore	239	239		Ṛgveda
+Pāṇ	पाण्	restore	223	206		Pāṇini, Aṣṭādhyāyī
+Pi	पि	keep	205	205		
+ViDh	विध्	restore	192	185		Viṣṇu-dharmasūtra
+DhKo	ध्को	restore	160	154		Dharmakośa
+KSm	क्स्म्	restore	155	153		Kātyāyana-smṛti
+BDh	ब्ध्	restore	149	138		Baudhāyana-dharmasūtra
+Śrād	श्राद्	restore	145	143		Śrāddha section (index)
+DP	द्प्	restore	115	115		
+TS	त्स्	restore	112	111		Taittirīya-saṃhitā
+Āśau	आशौ	keep	104	104		Āśauca section (index)
+Āhn	आह्न्	restore	99	99		Āhnika section (index)
+KūPu	कूपु	keep	83	81		Kūrma-purāṇa
+ĀpGṛ	आप्गृ	restore	78	78		Āpastamba-gṛhyasūtra
+Vi	वि	keep	78	79		
+Saṃ	सं	keep	75	74		
+ĀśGṛ	आश्गृ	restore	64	64		Āśvalāyana-gṛhyasūtra
+HārSm	हार्स्म्	restore	60	60		Hārīta-smṛti
+Vya	व्य	keep	59	60		Vyavahāra section (index)
+PiSm	पिस्म्	restore	54	54		Pitāmaha-smṛti
+ViPu	विपु	keep	53	53		Viṣṇu-purāṇa
+PMS	प्म्स्	restore	49	36		Pūrvamīmāṃsā-sūtra
+PP	प्प्	restore	49	49		
+ParSm	पर्स्म्	restore	48	48		Parāśara-smṛti
+Vy	व्य्	restore	48	47		
+VS	व्स्	restore	47	46		Vājasaneyi-saṃhitā
+ChU	छु	keep	46	46		Chāndogya-upaniṣad
+YaSm	यस्म्	restore	43	43		Yama-smṛti
+ŚB	श्ब्	restore	41	40		Śatapatha-brāhmaṇa
+Mā	मा	keep	40	5		
+BṛSm	बृस्म्	restore	39	38		Bṛhaspati-smṛti
+ŚaṅSm	शङ्स्म्	restore	39	39		Śaṅkha-smṛti
+NMā	न्मा	restore	39	38		
+BhG	भ्ग्	restore	37	37		Bhagavadgītā
+BāU	बाउ	keep	37	36		Bṛhadāraṇyaka-upaniṣad
+SaṃSm	संस्म्	restore	36	36		Saṃvarta-smṛti
+SkP	स्क्प्	restore	32	32		Skanda-purāṇa
+PārG	पार्ग्	restore	30	27		Pāraskara-gṛhyasūtra
+DaSm	दस्म्	restore	30	30		Dakṣa-smṛti
+Manu	मनु	keep	29	67		Manu-smṛti
+BauGṛ	बौगृ	keep	28	27		Baudhāyana-gṛhyasūtra
+Kāt	कात्	keep	27	27		Kātyāyana
+AṅSm	अङ्स्म्	restore	27	27		Aṅgiras-smṛti
+May	मय्	keep	26	1		
+AitB	ऐत्ब्	restore	26	25		Aitareya-brāhmaṇa
+ĀpŚr	आप्श्र्	restore	25	25		Āpastamba-śrautasūtra
+TB	त्ब्	restore	23	23		Taittirīya-brāhmaṇa
+ChUp	छुप्	restore	22	22		Chāndogya-upaniṣad
+ĀśG	आश्ग्	restore	22	21		
+PSm	प्स्म्	restore	22	20		
+MārPu	मार्पु	restore	22	22		Mārkaṇḍeya-purāṇa
+KāKh	काख्	restore	22	22		
+MS	म्स्	restore	21	21		Maitrāyaṇī-saṃhitā
+ŚL	श्ल्	restore	20	19		
+ViSm	विस्म्	restore	19	19		
+VyāSm	व्यास्म्	restore	19	19		
+MatPu	मत्पु	restore	19	19		
+PraKh	प्रख्	restore	19	19		
+PārSm	पार्स्म्	restore	18	18		
+JābUp	जाबुप्	restore	18	18		
+TaitUp	तैतुप्	restore	18	18		
+NQ	न्क़्	restore	18	18		
+ŚāSm	शास्म्	restore	16	16		
+ĀpSm	आप्स्म्	restore	16	16		
+Part	पर्त्	keep	15	1		
+MNU	म्नु	restore	15	15		
+KūrPu	कूर्पु	restore	15	14		
+GaPu	गपु	keep	15	15		
+October	ओच्तोबेर्	restore	14	4		
+VāmP	वाम्प्	restore	14	14		
+BṛĀrUp	बृआरुप्	restore	13	11		
+TV	त्व्	keep	13	13		
+Bau	बौ	keep	13	13		
+Yāj	याज्	restore	13	13		
+UMS	उम्स्	restore	12	12		
+NP	न्प्	restore	12	12		
+March	मर्छ्	restore	11	1		
+ŚveUp	श्वेउप्	restore	11	11		
+Nir	निर्	restore	11	11		
+PārGṛ	पार्गृ	restore	11	11		
+BṛĀUp	बृआउप्	restore	11	10		
+NṛPu	नृपु	keep	11	11		
+BrPu	ब्र्पु	restore	11	11		
+Rām	राम्	restore	10	10		
+MatsPu	मत्स्पु	restore	10	10		
+MaPu	मपु	keep	10	10		
+TaitBr	तैत्ब्र्	restore	9	9		
+ĀśŚ	आश्श्	restore	9	9		
+KāśSm	काश्स्म्	restore	9	9		
+TaitS	तैत्स्	restore	8	8		
+TaitĀ	तैता	keep	8	8		
+PB	प्ब्	restore	8	7		
+VāyPu	वाय्पु	restore	8	8		
+UśSm	उश्स्म्	restore	8	8		
+ViDhU	विधु	keep	8	8		
+Śāti	शाति	keep	8	8		
+Śaṅkha	शङ्ख	keep	7	7		
+Śab	शब्	keep	7	7		
+VāPu	वापु	keep	7	7		
+YamSm	यम्स्म्	restore	7	7		
+YMtā	य्म्ता	restore	7	7		
+Va	व	keep	6	5		
+AitĀ	ऐता	keep	6	6		
+Medh	मेध्	keep	6	1		
+TĀ	ता	keep	6	6		
+MD	म्द्	restore	6	6		
+BṛU	बृउ	keep	6	6		
+AitBr	ऐत्ब्र्	restore	6	6		
+AgPu	अग्पु	restore	6	6		
+ApDh	अप्ध्	restore	6	6		
+ĀpŚ	आप्श्	restore	5	5		
+Pān	पान्	restore	5	4		
+KAŚ	कश्	restore	5	3		
+Pāṇini	पाणिनि	keep	5	5		
+ĀpPar	आप्पर्	restore	5	5		
+LiṅPu	लिङ्पु	restore	5	5		
+BāUp	बाउप्	restore	5	5		
+ViDhPu	विध्पु	restore	5	5		
+UṣSm	उष्स्म्	restore	5	5		
+SṛKh	सृख्	restore	5	4		
+Viṣṇu	विष्णु	keep	5	7		
+Nirukta	निरुक्त	keep	4	4		
+AV	अव्	restore	4	3		
+YSū	य्सू	restore	4	2		
+Āp	आप्	keep	4	4		
+Śārīra	शारीर	keep	4	4		
+ĀpPari	आप्परि	restore	4	4		
+MuṇUp	मुणुप्	restore	4	4		
+HāSm	हास्म्	restore	4	4		
+ParUp	परुप्	restore	4	4		
+ĀśrUp	आश्रुप्	restore	4	3		
+ŚaṃSm	शंस्म्	restore	4	4		
+BSm	ब्स्म्	restore	4	4		
+Pai	पै	keep	4	4		
+BaU	बउ	keep	4	4		
+ŚBr	श्ब्र्	restore	4	4		
+BhP	भ्प्	restore	4	4		
+MārP	मार्प्	restore	4	4		
+ĀpMP	आप्म्प्	restore	3	3		
+MSSaṃ	म्स्सं	restore	3	3		
+TU	तु	keep	3	3		
+BauG	बौग्	restore	3	3		
+NyāS	न्यास्	restore	3	3		
+KātŚr	कात्श्र्	restore	3	3		
+RVKh	र्व्ख्	restore	3	3		
+ĀśŚr	आश्श्र्	restore	3	3		
+BrSū	ब्र्सू	restore	3	3		
+NSm-C	न्स्म्-च्	restore	3	3		
+PiDh	पिध्	restore	3	3		
+TaitĀr	तैतार्	restore	3	3		
+LiPu	लिपु	keep	3	2		
+MNUp	म्नुप्	restore	3	3		
+VySm	व्य्स्म्	restore	3	3		
+AtrSm	अत्र्स्म्	restore	3	3		
+VaSm	वस्म्	restore	3	3		
+VāmPu	वाम्पु	restore	3	3		
+JU	जु	keep	3	3		
+Vyā	व्या	keep	3	3		
+ĀśŚrSū	आश्श्र्सू	restore	3	3		
+MB	म्ब्	restore	3	3		
+VarP	वर्प्	restore	3	3		

@@ -1,0 +1,84 @@
+# Grammar profiles (§5.2) and frozen baseline modes (§40, BASE-1).
+# A baseline mode is a versioned frozen configuration, never an alias to "latest".
+version: 1
+
+profiles:
+  classical_strict:
+    odd_pada_forbidden_2_4: [LLL, LLG]          # AN-2
+    even_pada_forbidden_2_4: [LLL, LLG, GLG]    # AN-1 (GLG only under classical_strict)
+    vipula_caesura: required                    # §5.2: ma/ra (and ma-bha) need a visible word end
+  classical_lenient:
+    # Same pāda grammar; a vipulā whose caesura is fused by sandhi (not visible to the
+    # scanner, OFF-7) is admitted and reported in `caesura_unverified_padas`.
+    odd_pada_forbidden_2_4: [LLL, LLG]
+    even_pada_forbidden_2_4: [LLL, LLG, GLG]
+    vipula_caesura: lenient
+
+baseline_modes:
+  BASE-A:
+    frozen_id: base-a-v1
+    metres: [anustubh]
+    anustubh_variants: [pathya]      # M2 is strictly pathyā-only (§12)
+    pada_counts: [4]                 # BASE-8: zero partials under BASE-A
+    start_anchors: [word_start, soft_start]   # BASE-2
+    # --no-models null (BASE-9): every syllable L with probability null_p_light.
+    # The metre hypothesis is uniform over the strings the enabled grammar admits.
+    null_model: uniform_lg
+    null_p_light: 0.5
+    use_cues_in_score: false         # cues are recorded, not scored, until BASE-B
+    use_frames: false
+    use_prose_lm: false
+    use_retrieval: false
+    ocr_edits: false                 # zero-edit gate; M5 adds the banded aligner
+    sc12_fused_closer_typing: true   # SC-12 surface typing of fused -iti end boundaries
+    # The pathyā grammar has no recorded primary-source verification yet. Enabling it
+    # is permitted only for a developer alpha and is reported as a release blocker.
+    allow_unverified_grammar: true
+  BASE-C:
+    # Review-only OCR near-misses (padya/ocr_suspects.py): written to suspects.jsonl,
+    # never to verses.jsonl; they do not change the decoder or any verse count.
+    ocr_suspects: {enabled: true, max_edits_full: 2, max_edits_half: 1, max_edits_per_pada: 1, min_half_pada: 11}
+    # B3 crossing cues as a hard rule: no verse contains ॥, a verse number, or a daṇḍa
+    # off its pāda boundaries (the half-shifted window error; padya/candidates.py).
+    reject_crossing: true
+    # M2.5 vipulās + anchored half-verses (§40 BASE-C, BASE-7). Everything else as BASE-A.
+    # Each enabled variant is still needs_verification; see data/metres/verification.tsv.
+    frozen_id: base-c-v6               # v2: crossing rule, strict list; v3: line halves, 11/12 upajāti; v4: twin halves; v5: editorial brackets; v6: citation sigla as separators
+    # anuṣṭubh plus every fixed-pattern entry of the registry (sama, upajāti mixtures,
+    # ardhasama). All are needs_verification; a 4-pāda fixed pattern has ≥ 28 fixed
+    # slots, so accidental prose matches are negligible, but see verification.tsv.
+    # Strict vṛtta list (reports/strict_vrttas.md, tools/strict_vrttas.py): pramāṇikā and
+    # vidyunmālā are off (8-syllable pādas inside the anuṣṭubh space); the metres in
+    # full_only_metres are detected only as full stanzas, with no halves and no typo
+    # verses (chance halves in prose above the strict limit). Upajāti inherits this
+    # from indravajrā/upendravajrā.
+    # A half of these metres is accepted only when its two pādas stand on separate lines
+    # (expected chance halves in the digests ~7e-4, below the strict 0.01; strict_vrttas.md).
+    # upajati_mixed: 11- and 12-syllable upajāti pādas in one stanza (epic/purāṇic usage).
+    full_only_metres: [indravajra, upendravajra, upajati, upajati_mixed, salini, vatormi, bhujagasisubhrta, bhujangaprayata, sragvini]
+    full_only_line_halves: true
+    # One-line halves of these metres need a twin: the other half of the stanza, beside it
+    # across a single daṇḍa, fitting within 2 OCR edits (padya/twins.py); the damaged
+    # twin is then a review-only typo half.
+    full_only_twin_halves: true
+    # Editorial brackets (owner's rule, 2026-10-18): a one-line `( … )` of at most max_chars
+    # characters with no daṇḍa is an editor's correction or gloss inside a verse
+    # (`यतेस्सायं (यत्र सायं)`); the scanner skips it (padya/scanner.py _mask_editorial).
+    # citation_tokens: a Latin citation siglum with its number (`[MDh 5․125]`, `BDhS 1․1․1․6cd`, from
+    # tools/fix_sigla.py) is a separator, not a foreign-script barrier, so a śloka printed as two
+    # numbered half-sūtras still joins (padya/scanner.py _mask_citations).
+    editorial_brackets: {enabled: true, max_chars: 20, citation_tokens: true}
+    metres: [anustubh, bhujagasisubhrta, indravajra, upendravajra, upajati, dodhaka, salini, vatormi, bhramaravilasita, rathoddhata, svagata, vamsastha, indravamsa, upajati_12, upajati_mixed, drutavilambita, bhujangaprayata, totaka, sragvini, praharsini, rucira, mattamayura, vasantatilaka, malini, pancacamara, sikharini, mandakranta, harini, prthvi, sardulavikridita, sragdhara, viyogini, puspitagra]
+    anustubh_variants: [pathya, na_vipula, bha_vipula, ma_vipula, ra_vipula]
+    pada_counts: [4, 2]              # 2 = anchored halves only (DET-7, NEG-3): hard word start,
+                                     # ending at a daṇḍa or verse number
+    start_anchors: [word_start, soft_start]
+    null_model: uniform_lg
+    null_p_light: 0.5
+    use_cues_in_score: false
+    use_frames: false
+    use_prose_lm: false
+    use_retrieval: false
+    ocr_edits: false
+    sc12_fused_closer_typing: true
+    allow_unverified_grammar: true

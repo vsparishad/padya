@@ -1,0 +1,5 @@
+id: T08
+title: wrong daṇḍa, roman I/1 false delimiter
+status: deferred
+deferred_until: M5
+reason: tier-R delimiter promotion not built

@@ -1,0 +1,10 @@
+id: T10
+title: pure prose with तथा च
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "तथा च मनुः प्रातःस्नानं प्रशंसति तत्र कालविशेषो वक्तव्यः यतोऽत्र बहवो विवदन्ते इति निर्णयः क्रियते ।"
+expect:
+  verse_count: 0
+  regions_partition: true

@@ -1,0 +1,13 @@
+id: T21
+title: fused -इति closer (कुटुम्बकमिति)
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "अयं निजः परो वेति गणना लघुचेतसाम् उदारचरितानां तु वसुधैव कुटुम्बकमिति ।"
+expect:
+  verse_count: 1
+  verses:
+    - text_ends: "कुटुम्बकमि"     # §31.3 rule 1: shared grapheme मि attaches to the verse cover
+      end_boundary: {resolution: inside_grapheme, offset: null, transformation: "m+i→mi"}
+  regions_partition: true

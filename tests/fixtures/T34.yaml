@@ -1,0 +1,5 @@
+id: T34
+title: fused opener and closer sharing graphemes
+status: deferred
+deferred_until: M3
+reason: F-5 fused openers not built

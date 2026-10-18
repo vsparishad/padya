@@ -1,0 +1,25 @@
+# Seed copied verbatim from verse_detector_blueprint_v6.md 32.3.
+# Values are *initial*; change only via tools/tune.py or with owner agreement (§0.4).
+openers:
+  single_authority:
+    patterns: ["{AUTH_NOM}", "{AUTH_NOM} आह", "{AUTH_NOM} उवाच", "{AUTH_NOM}ऽपि", "तथा च {AUTH_NOM}", "अत्र {AUTH_NOM}", "यदाह {AUTH_NOM}", "यथाह {AUTH_NOM}", "उक्तं च {AUTH_INS}", "{AUTH_LOC}"]
+  multi_hop:
+    patterns: ["{DIGEST_LOC} {AUTH_NOM}", "{DIGEST_LOC} {AUTH_LOC}"]
+  anonymous:
+    literals: ["अत्र श्लोकाः", "तत्र श्लोकः", "अत्र श्लोकः", "संग्रहश्लोकः", "कारिका च", "वृद्धवाक्यम्", "अत्रोदाहरन्ति", "यथोक्तम्", "स्मृतिश्च", "उक्तं च", "उक्तं हि", "तदुक्तम्", "तदाह", "यथाह", "यदाह", "स्मृत्यन्तरे", "पुराणान्तरे", "पुराणे", "भारते", "गीतासु"]
+  typographic:
+    endings: ["ः", "ौ", "े", "षु"]
+    marks: ["—", ":-", "-", "‘", "“"]
+  fused:  # F-5: opener stem + sandhi outcome, see §31.2
+    - {stem: "यथाह", surface: "यथाहा", transformation: "a+a→A"}
+    - {stem: "उक्तं च", surface: "उक्तं चा", transformation: "a+a→A"}
+    - {stem: "आह", surface: "आहा", transformation: "a+a→A"}
+    - {stem: "इति", surface: "इत्य", transformation: "i+V→yV"}
+closers:
+  quotative: ["इति", "इति च"]
+  ellipsis: ["इत्यादि", "इत्यादिना", "इत्युपक्रम्य", "इत्यन्तेन", "इत्यादिग्रन्थः"]
+  causal: ["इति वचनात्", "इति स्मृतेः", "इति स्मरणात्", "इति निषेधात्", "इति श्रुतेः", "इत्युक्तेः", "इति दर्शनात्", "इत्युक्तत्वात्"]
+  structural: ["’", "”", "{VERSE_NUMBER}"]
+  fused_suffixes: ["मिति", "दिति", "निति", "रिति", "ेति", "ीति", "्विति"]   # SC-12 / §31.1
+split_bridges: ["उत्तरार्धं तु", "उत्तरार्धम्", "अस्यार्थः", "इत्यर्धेन", "पूर्वार्धे", "उत्तरार्धे"]
+shibboleths: ["इति चेन्न", "अत्रोच्यते", "तन्न", "ननु", "वाच्यम्", "व्याख्येयम्", "प्रकृतम्", "इत्यर्थः", "इति भावः", "इति चेत्"]

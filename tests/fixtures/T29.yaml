@@ -1,0 +1,5 @@
+id: T29
+title: clean paragraph next to noisy OCR page
+status: deferred
+deferred_until: M5
+reason: local noise estimation not built

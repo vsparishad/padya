@@ -1,0 +1,102 @@
+{
+  "receipt_version": "1",
+  "cleaner_file": "clean_sanskrit_corpus.py",
+  "cleaner_version_string": "3.1",
+  "cleaner_sha256": "66e09ba8761205b50bf27f77171592454dc34d57941b15baf7a3fb1698501cf4",
+  "selftest_last_line": "SELFTEST: PASSED",
+  "fixture_source_sha256": "940ff1a218c830eab4415234c3f31e7a3e496ec526061dbddf427175f0c4529c",
+  "fixture_cleaned_sha256": "7ebd2248014d819eca28b6746cf1e13049df81aad1c2309bf87ea3c67684e35f",
+  "fixture_cleaned_text": "तथा च मनुः अयं निजः परो वेति गणना लघुचेतसाम् इत्यादि । ततः परं निर्णयः ।\nअ॑ग्निꣳ ई॒ळे पुरो॑हितं यज्ञस्य देवमृत्विजम् । होतारं रत्नधातमम् ॥ १ ॥\n\nका ख्् ग । सोऽब्रवीत् ॥ २ ॥\n",
+  "fixture_records": [
+    {
+      "kind": "vedic",
+      "start": 73,
+      "end": 80,
+      "marks": 1
+    },
+    {
+      "kind": "vedic",
+      "start": 81,
+      "end": 85,
+      "marks": 1
+    },
+    {
+      "kind": "vedic",
+      "start": 86,
+      "end": 95,
+      "marks": 1
+    },
+    {
+      "kind": "verse_number",
+      "start": 139,
+      "end": 140,
+      "number": "१"
+    },
+    {
+      "kind": "flag",
+      "cls": "double_virama",
+      "start": 148,
+      "end": 150
+    },
+    {
+      "kind": "verse_number",
+      "start": 168,
+      "end": 169,
+      "number": "२"
+    }
+  ],
+  "manifest_keys": [
+    "cleaner_version",
+    "files",
+    "generated_at",
+    "offsets_refer_to",
+    "options",
+    "output",
+    "source_folder",
+    "source_tier"
+  ],
+  "manifest_offsets_refer_to": "cleaned_devanagari text (Python str indices, 0-based, end exclusive)",
+  "manifest_options": {
+    "slp1": true,
+    "reading_view": false,
+    "strip_accents": false,
+    "sandhi_join": true,
+    "records": true
+  },
+  "report_file_fields": [
+    "clean_chars",
+    "counts",
+    "encoding",
+    "error",
+    "noise_per_1000",
+    "orig_chars",
+    "rel_path",
+    "success"
+  ],
+  "report_counts_keys": [
+    "accents_present",
+    "detached_matra",
+    "flag_double_virama",
+    "flag_latin_in_word",
+    "flag_long_unspaced_run",
+    "flag_orphan_matra",
+    "flag_virama_then_matra",
+    "hyphen_not_joined",
+    "latin_s_to_avagraha",
+    "pipes_to_danda",
+    "records_written",
+    "slp1_accents_removed",
+    "slp1_stray_virama"
+  ],
+  "noise_per_1000": 13.7,
+  "offset_checks": {
+    "vedic:अ॑ग्निꣳ": true,
+    "vedic:ई॒ळे": true,
+    "vedic:पुरो॑हितं": true,
+    "vn:१": true,
+    "flag:double_virama:'््'": true,
+    "vn:२": true
+  },
+  "all_offsets_valid": true,
+  "python": "Python 3.13.16"
+}

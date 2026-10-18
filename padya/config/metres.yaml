@@ -1,0 +1,766 @@
+# Metre registry (§5.3, schema §32.2), generated from the blueprint tables.
+# Every entry is needs_verification: mechanical gaṇa agreement is NOT philological
+# verification (REL6-5). No primary-source attestation has been recorded (REL6-8).
+# Only entries whose status is `verified` may enter the active registry, except
+# anustubh/pathya, which a developer-alpha baseline mode may enable explicitly
+# (reported as a release blocker).
+registry_version: 0.1.0
+metres:
+- id: anustubh
+  display: Anuṣṭubh (śloka)
+  class: grammar
+  grammar: padya.metres.anustubh
+  syllables_per_pada: 8
+  padas: 4
+  verification_status: needs_verification
+  primary_reference: Vṛttaratnākara (to be recorded by a human verifier)
+  second_reference: null
+  verified_by: null
+  variants:
+    pathya:
+      status: needs_verification
+      enabled_in:
+      - BASE-A
+      - BASE-B
+      - BASE-C
+    na_vipula:
+      status: needs_verification
+      enabled_in:
+      - BASE-C
+      note: 'M2.5: predicate implemented (§5.2 table); primary-source verification pending'
+    bha_vipula:
+      status: needs_verification
+      enabled_in:
+      - BASE-C
+      note: 'M2.5: predicate implemented (§5.2 table); primary-source verification pending'
+    ma_vipula:
+      status: needs_verification
+      enabled_in:
+      - BASE-C
+      note: 'M2.5: predicate implemented (§5.2 table); primary-source verification pending'
+    ra_vipula:
+      status: needs_verification
+      enabled_in:
+      - BASE-C
+      note: 'M2.5: predicate implemented (§5.2 table); primary-source verification pending'
+    ta_vipula:
+      status: blocked
+      note: '§5.2: epic, off'
+- id: pramanika
+  display: Pramāṇikā
+  class: sama
+  syllables_per_pada: 8
+  gana_tokens:
+  - ja
+  - ra
+  - la
+  - ga
+  pattern: LGLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: vidyunmala
+  display: Vidyunmālā
+  class: sama
+  syllables_per_pada: 8
+  gana_tokens:
+  - ma
+  - ma
+  - ga
+  - ga
+  pattern: GGGGGGGG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: bhujagasisubhrta
+  display: Bhujagaśiśubhṛtā
+  class: sama
+  syllables_per_pada: 9
+  gana_tokens:
+  - na
+  - na
+  - ma
+  pattern: LLLLLLGGG
+  final_anceps: true
+  yati:
+  - 7
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: indravajra
+  display: Indravajrā
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ta
+  - ta
+  - ja
+  - ga
+  - ga
+  pattern: GGLGGLLGLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: upendravajra
+  display: Upendravajrā
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ja
+  - ta
+  - ja
+  - ga
+  - ga
+  pattern: LGLGGLLGLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: upajati
+  display: Upajāti
+  class: mixture
+  syllables_per_pada: 11
+  components:
+  - indravajra
+  - upendravajra
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: dodhaka
+  display: Dodhaka
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - bha
+  - bha
+  - bha
+  - ga
+  - ga
+  pattern: GLLGLLGLLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: salini
+  display: Śālinī
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ma
+  - ta
+  - ta
+  - ga
+  - ga
+  pattern: GGGGGLGGLGG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: vatormi
+  display: Vātormī
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ma
+  - bha
+  - ta
+  - ga
+  - ga
+  pattern: GGGGLLGGLGG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: bhramaravilasita
+  display: Bhramaravilasita
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ma
+  - bha
+  - na
+  - la
+  - ga
+  pattern: GGGGLLLLLLG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: rathoddhata
+  display: Rathoddhatā
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ra
+  - na
+  - ra
+  - la
+  - ga
+  pattern: GLGLLLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: svagata
+  display: Svāgatā
+  class: sama
+  syllables_per_pada: 11
+  gana_tokens:
+  - ra
+  - na
+  - bha
+  - ga
+  - ga
+  pattern: GLGLLLGLLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: vamsastha
+  display: Vaṃśastha
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - ja
+  - ta
+  - ja
+  - ra
+  pattern: LGLGGLLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: indravamsa
+  display: Indravaṃśā
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - ta
+  - ta
+  - ja
+  - ra
+  pattern: GGLGGLLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: upajati_12
+  display: Upajāti-12
+  class: mixture
+  syllables_per_pada: 12
+  components:
+  - vamsastha
+  - indravamsa
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: upajati_mixed
+  display: Upajāti (triṣṭubh–jagatī mixed)
+  class: mixture
+  mixed_lengths: true             # pādas of 11 and 12 syllables in one stanza (at least one of each)
+  syllables_per_pada: null
+  components:
+  - indravajra
+  - upendravajra
+  - vamsastha
+  - indravamsa
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  note: 'Epic/purāṇic mixture; not a named entry in the Vṛttaratnākara, Mishra or Chandojñānam lists (reports/strict_vrttas.md). Built only from four list-attested patterns; needs philological sign-off.'
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: drutavilambita
+  display: Drutavilambita
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - na
+  - bha
+  - bha
+  - ra
+  pattern: LLLGLLGLLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: bhujangaprayata
+  display: Bhujaṅgaprayāta
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - ya
+  - ya
+  - ya
+  - ya
+  pattern: LGGLGGLGGLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: totaka
+  display: Toṭaka
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - sa
+  - sa
+  - sa
+  - sa
+  pattern: LLGLLGLLGLLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: sragvini
+  display: Sragviṇī
+  class: sama
+  syllables_per_pada: 12
+  gana_tokens:
+  - ra
+  - ra
+  - ra
+  - ra
+  pattern: GLGGLGGLGGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: praharsini
+  display: Praharṣiṇī
+  class: sama
+  syllables_per_pada: 13
+  gana_tokens:
+  - ma
+  - na
+  - ja
+  - ra
+  - ga
+  pattern: GGGLLLLGLGLGG
+  final_anceps: true
+  yati:
+  - 3
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: rucira
+  display: Rucirā
+  class: sama
+  syllables_per_pada: 13
+  gana_tokens:
+  - ja
+  - bha
+  - sa
+  - ja
+  - ga
+  pattern: LGLGLLLLGLGLG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: mattamayura
+  display: Mattamayūra
+  class: sama
+  syllables_per_pada: 13
+  gana_tokens:
+  - ma
+  - ta
+  - ya
+  - sa
+  - ga
+  pattern: GGGGGLLGGLLGG
+  final_anceps: true
+  yati:
+  - 4
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: vasantatilaka
+  display: Vasantatilakā
+  class: sama
+  syllables_per_pada: 14
+  gana_tokens:
+  - ta
+  - bha
+  - ja
+  - ja
+  - ga
+  - ga
+  pattern: GGLGLLLGLLGLGG
+  final_anceps: true
+  yati: []
+  aliases:
+  - simhonnata
+  - uddharsini
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: malini
+  display: Mālinī
+  class: sama
+  syllables_per_pada: 15
+  gana_tokens:
+  - na
+  - na
+  - ma
+  - ya
+  - ya
+  pattern: LLLLLLGGGLGGLGG
+  final_anceps: true
+  yati:
+  - 8
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: pancacamara
+  display: Pañcacāmara
+  class: sama
+  syllables_per_pada: 16
+  gana_tokens:
+  - ja
+  - ra
+  - ja
+  - ra
+  - ja
+  - ga
+  pattern: LGLGLGLGLGLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: sikharini
+  display: Śikhariṇī
+  class: sama
+  syllables_per_pada: 17
+  gana_tokens:
+  - ya
+  - ma
+  - na
+  - sa
+  - bha
+  - la
+  - ga
+  pattern: LGGGGGLLLLLGGLLLG
+  final_anceps: true
+  yati:
+  - 6
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: mandakranta
+  display: Mandākrāntā
+  class: sama
+  syllables_per_pada: 17
+  gana_tokens:
+  - ma
+  - bha
+  - na
+  - ta
+  - ta
+  - ga
+  - ga
+  pattern: GGGGLLLLLGGLGGLGG
+  final_anceps: true
+  yati:
+  - 4
+  - 10
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: harini
+  display: Hariṇī
+  class: sama
+  syllables_per_pada: 17
+  gana_tokens:
+  - na
+  - sa
+  - ma
+  - ra
+  - sa
+  - la
+  - ga
+  pattern: LLLLLGGGGGLGLLGLG
+  final_anceps: true
+  yati:
+  - 6
+  - 10
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: prthvi
+  display: Pṛthvī
+  class: sama
+  syllables_per_pada: 17
+  gana_tokens:
+  - ja
+  - sa
+  - ja
+  - sa
+  - ya
+  - la
+  - ga
+  pattern: LGLLLGLGLLLGLGGLG
+  final_anceps: true
+  yati:
+  - 8
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: sardulavikridita
+  display: Śārdūlavikrīḍita
+  class: sama
+  syllables_per_pada: 19
+  gana_tokens:
+  - ma
+  - sa
+  - ja
+  - sa
+  - ta
+  - ta
+  - ga
+  pattern: GGGLLGLGLLLGGGLGGLG
+  final_anceps: true
+  yati:
+  - 12
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: sragdhara
+  display: Sragdharā
+  class: sama
+  syllables_per_pada: 21
+  gana_tokens:
+  - ma
+  - ra
+  - bha
+  - na
+  - ya
+  - ya
+  - ya
+  pattern: GGGGLGGLLLLLLGGLGGLGG
+  final_anceps: true
+  yati:
+  - 7
+  - 14
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: viyogini
+  display: Viyoginī (Sundarī)
+  class: ardhasama
+  odd_pattern: LLGLLGLGLG
+  even_pattern: LLGGLLGLGLG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []
+- id: puspitagra
+  display: Puṣpitāgrā
+  class: ardhasama
+  odd_pattern: LLLLLLGLGLGG
+  even_pattern: LLLLGLLGLGLGG
+  final_anceps: true
+  yati: []
+  aliases: []
+  verification_status: needs_verification
+  primary_reference: null
+  second_reference: null
+  verified_by: null
+  fixtures:
+    positive: []
+    negative: []

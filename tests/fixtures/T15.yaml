@@ -1,0 +1,5 @@
+id: T15
+title: two editions sharing a quotation
+status: deferred
+deferred_until: M6
+reason: retrieval/leakage controls need gold splits

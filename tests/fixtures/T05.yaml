@@ -1,0 +1,14 @@
+id: T05
+title: overlapping windows across two consecutive verses
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "अयं निजः परो वेति गणना लघुचेतसाम् । उदारचरितानां तु वसुधैव कुटुम्बकम् ॥ कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥"
+expect:
+  verse_count: 2
+  min_candidates: 3        # the half-shifted window survives as an alternative
+  verses:
+    - {text_starts: "अयं", text_ends: "कुटुम्बकम्"}
+    - {text_starts: "कर्मण्येवा", text_ends: "सङ्गोऽस्त्वकर्मणि"}
+  regions_partition: true

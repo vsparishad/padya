@@ -1,0 +1,17 @@
+id: T01
+title: four pādas with and without daṇḍas
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "तथा च अयं निजः परो वेति गणना लघुचेतसाम् । उदारचरितानां तु वसुधैव कुटुम्बकम् ॥ इति ।"
+paired_text: "तथा च अयं निजः परो वेति गणना लघुचेतसाम् उदारचरितानां तु वसुधैव कुटुम्बकम् इति"
+expect:
+  verse_count: 1
+  verses:
+    - metre_id: anustubh
+      partial: full
+      text_starts: "अयं"
+      text_ends: "कुटुम्बकम्"
+  same_projection_as_paired: true
+  regions_partition: true

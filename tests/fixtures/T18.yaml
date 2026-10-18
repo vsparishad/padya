@@ -1,0 +1,5 @@
+id: T18
+title: 1M-syllable adversarial input
+status: deferred
+deferred_until: M7
+reason: stress harness and caps not built

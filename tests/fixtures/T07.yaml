@@ -1,0 +1,5 @@
+id: T07
+title: OCR-dropped vowel sign
+status: deferred
+deferred_until: M5
+reason: OCR edits and banded aligner not built

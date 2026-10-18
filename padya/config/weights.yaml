@@ -1,0 +1,80 @@
+# Seed copied verbatim from verse_detector_blueprint_v6.md 32.1.
+# Values are *initial*; change only via tools/tune.py or with owner agreement (§0.4).
+version: 1
+prose_model:
+  alpha_lex: 0.25
+  shibboleth_penalty: -2.5
+metre_prior:            # log P(m)
+  anustubh: 0.0
+  upajati: -2.2
+  vasantatilaka: -2.5
+  shardulavikridita: -2.8
+  default_vrtta: -3.5
+  arya: -3.0
+partial_prior:          # log P(k | m), before frame/retrieval lift
+  k4: 0.0
+  k2: -1.2
+  k3: -3.2
+  k1: -4.0
+variant_prior:          # anustubh odd pādas
+  pathya: 0.0
+  na_vipula: -2.5
+  bha_vipula: -2.8
+  ma_vipula: -2.8
+  ra_vipula: -3.5
+  ta_vipula: -4.2
+  hypermetric9: -3.0
+edits:
+  lambda_edit: 1.6
+  cost_uncertain: 0.5
+  cost_sc10_split: 0.15
+  cost_sc11_lenient: 0.20
+frames:
+  w_open: 2.0
+  w_open_punct: 2.8
+  w_close: 2.0
+  w_synergy: 1.2
+  ellipsis_lift_to: 0.0
+retrieval:
+  w_ret: 4.5
+  shingle_overlap_min: 0.50
+  shingle_consecutive_pratika: 3
+  max_norm_edit_distance: 0.12
+  distinctiveness_penalty_per_extra_occurrence: -0.8
+cues:
+  c1_soft_start: -1.0
+  c1_inside_word: -2.5
+  c2_end_word: 0.6
+  c2_end_midword: -2.0
+  c3_all_padas: 1.2
+  c3_per_pada: 0.3
+  c4_yati: 0.5
+  c5_start_token: 1.2
+  c6_end_token: 1.8
+  c7_verse_number: 3.5
+  c8_cross_d2: -3.0
+  b3_cross_d1_offpada: -1.5
+  b3_cross_ps_T: -1.5
+  b3_cross_ps_PR: -0.3
+decoder:
+  nu_start: -1.0
+  pair_bonus: 1.5
+  pair_max_gap_words: 8
+uncertain:
+  p_low: 0.35
+  p_high: 0.65
+  min_run_syllables: 8
+  near_miss_score: -2.0
+language:
+  non_sa_prior: -3.0
+caps:
+  candidates_per_1k_syllables: 400
+  pair_arcs_per_1k_syllables: 20
+  parse_alternatives_per_window: 4
+tiers:
+  T: {budget32: 0.0, indels32: 0, pada_cap: 0}
+  P_lo: {budget32: 1.0, indels32: 0, pada_cap: 1, noise_max: 5}
+  P_hi: {budget32: 2.0, indels32: 1, pada_cap: 1}
+  R_lo: {budget32: 1.5, indels32: 1, pada_cap: 1, noise_max: 5}
+  R_mid: {budget32: 2.5, indels32: 2, pada_cap: 1, noise_max: 20}
+  R_unprocessable_noise: 20

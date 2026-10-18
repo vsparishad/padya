@@ -1,0 +1,5 @@
+id: T41
+title: candidate cap on clean unspaced text
+status: deferred
+deferred_until: M7
+reason: regional cap accounting not built

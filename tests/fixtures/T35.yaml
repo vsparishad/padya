@@ -1,0 +1,5 @@
+id: T35
+title: punctuation-stripped T passage vs original
+status: deferred
+deferred_until: M2
+reason: needs T-punct/T-stripped gold builder

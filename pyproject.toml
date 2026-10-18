@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "padya"
+version = "0.1.0"
+description = "पद्यज्ञापिनी — deterministic, rule-based detector of classical Sanskrit verses (padya) inside Devanagari prose, with offline tagged-HTML review pages"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Neelakantha Shastri", email = "shastravid@gmail.com" }]
+maintainers = [{ name = "Vaidika Samrakshana Parishad" }]
+requires-python = ">=3.11"
+keywords = ["sanskrit", "chandas", "metre", "meter", "prosody", "verse", "devanagari", "dharmasastra", "ocr", "nlp"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Sanskrit",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+# §14 lists numpy and tqdm as runtime deps; the current detector does not need them (YAGNI).
+dependencies = [
+    "pyyaml>=6.0",
+    "regex>=2024.4.16",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "hypothesis>=6.100"]
+
+[project.urls]
+Homepage = "https://github.com/vsparishad/padya"
+Repository = "https://github.com/vsparishad/padya"
+Issues = "https://github.com/vsparishad/padya/issues"
+Specification = "https://github.com/vsparishad/padya/blob/main/verse_detector_blueprint_v7.md"
+
+[project.scripts]
+verse-detect = "padya.cli:main"
+padya = "padya.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["padya*", "tools*"]
+
+[tool.setuptools.package-data]
+padya = ["config/*.yaml", "config/*.json"]
+tools = ["tagger/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["slow: long-running property or subprocess tests"]

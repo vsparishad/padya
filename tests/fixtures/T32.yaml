@@ -1,0 +1,10 @@
+id: T32
+title: vipulā verse is not silently accepted as pathyā (na-vipulā in pāda 1)
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः । सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥"
+expect:
+  verse_count: 0           # recall miss by design under pathyā-only BASE-A (DET-12)
+  regions_partition: true

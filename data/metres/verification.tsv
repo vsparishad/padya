@@ -1,0 +1,7 @@
+metre	variant	pattern/constraint	primary_reference	second_reference	positive_examples	negative_examples	status
+anustubh	pathya	odd 5-7=LGG; even 5-7=LGL; 2-4 not LLL/LLG; strict even 2-4 not GLG					needs_verification
+anustubh	na_vipula	odd 5-7=LLL; syl4=G; 2-4 in {GGG,LGG,GLG}					needs_verification
+anustubh	bha_vipula	odd 5-7=GLL; syl4=G; 2-4 GLG (GGG needs caesura after 4)					needs_verification
+anustubh	ma_vipula	odd 5-7=GGG; syl4=G; 2-4 GLG; strict caesura after 5					needs_verification
+anustubh	ra_vipula	odd 5-7=GLG; syl4=G; 2-4 not LL*; strict caesura after 4					needs_verification
+anustubh	ta_vipula	odd 5-7=GGL; syl4=G; frame or retrieval only					blocked

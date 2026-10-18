@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verse Tagger</title>
+<!--
+  पद्यज्ञापिनी verse tagger (blueprint §10 / DATA-1 / QC-1…QC-5).
+  Single offline file. Open it in a browser, load a UTF-8 text, select text with the
+  cursor, right-click → "Tag as verse" (or press V). Every action is an append-only
+  event (QC-2); the current tags are derived by replaying the events. Nothing is written
+  to disk silently: export produces annotations.jsonl, events.jsonl and a marked copy.
+  Autosave uses the browser's localStorage, keyed by a hash of the text (QC-5).
+  Offsets are Unicode code points into the exact loaded text (INV-1, OFF-2).
+-->
+<style>
+/* Fonts (tools/devanagari_fonts.py): Adishila for Devanagari, Sanskrit 2003 for verses, Tiro for other scripts and Latin */
+@font-face { font-family: "Deva"; font-weight: 400; src: local("Adishila"), local("Adishila-Regular"); unicode-range: U+0900-097F, U+1CD0-1CFF, U+A8E0-A8FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Deva"; font-weight: 700; src: local("Adishila Bold"), local("Adishila-Bold"); unicode-range: U+0900-097F, U+1CD0-1CFF, U+A8E0-A8FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Deva"; font-style: italic; src: local("Adishila Italic"), local("Adishila-Italic"); unicode-range: U+0900-097F, U+1CD0-1CFF, U+A8E0-A8FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "DevaVerse"; src: local("Sanskrit 2003"), local("Sanskrit2003"); unicode-range: U+0900-097F, U+1CD0-1CFF, U+A8E0-A8FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Tiro"; src: local("Tiro Tamil"), local("TiroTamil"), local("TiroTamil-Regular"); unicode-range: U+0B80-0BFF; }
+@font-face { font-family: "Tiro"; src: local("Tiro Telugu"), local("TiroTelugu"), local("TiroTelugu-Regular"); unicode-range: U+0C00-0C7F; }
+@font-face { font-family: "Tiro"; src: local("Tiro Kannada"), local("TiroKannada"), local("TiroKannada-Regular"); unicode-range: U+0C80-0CFF; }
+@font-face { font-family: "Tiro"; src: local("Tiro Bangla"), local("TiroBangla"), local("TiroBangla-Regular"); unicode-range: U+0980-09FF; }
+@font-face { font-family: "Tiro"; src: local("Tiro Gurmukhi"), local("TiroGurmukhi"), local("TiroGurmukhi-Regular"); unicode-range: U+0A00-0A7F; }
+@font-face { font-family: "Tiro"; src: local("Tiro Devanagari Sanskrit"), local("TiroDevanagariSanskrit"), local("TiroDevanagariSanskrit-Regular"); unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F; }
+:root { --font-ui: "Deva", "Tiro", -apple-system, "Segoe UI", Roboto, sans-serif;
+        --font-deva: "Deva", "Tiro", "Kohinoor Devanagari", "Devanagari Sangam MN", serif;
+        --font-verse: "DevaVerse", "Deva", "Tiro", "Kohinoor Devanagari", serif; }
+
+  :root {
+    --bg: #faf8f3; --panel: #ffffff; --ink: #1f1d1a; --muted: #6b665d; --line: #e4dfd4;
+    --verse: #d9ead3; --verse-ink: #1e5a2a; --typo: #ffe58a; --typo-ink: #8a6100; --uncertain: #e6e0fa; --uncertain-ink: #4b3a8f; --ocr: #c0392b;
+    --accent: #7a3e12; --menu: #ffffff; --shadow: 0 8px 24px rgba(0,0,0,.14); --focus: #c96b2a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17161a; --panel: #211f25; --ink: #eae6df; --muted: #9b958b; --line: #37343d;
+      --verse: #244a2c; --verse-ink: #bfe8c6; --typo: #5a4a0c; --typo-ink: #ffe28a; --uncertain: #2f2a4d; --uncertain-ink: #cbbdff; --ocr: #ff8a7a;
+      --accent: #e0995c; --menu: #2a2730; --shadow: 0 8px 24px rgba(0,0,0,.5);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font-ui); display: flex; flex-direction: column; }
+  header { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 16px; margin: 0 8px 0 0; font-weight: 600; }
+  button, label.btn { font: inherit; font-size: 13px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); cursor: pointer; }
+  button:hover, label.btn:hover { border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  input[type=file] { display: none; }
+  .stats { margin-left: auto; color: var(--muted); font-size: 13px; }
+  main { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 320px; min-height: 0; }
+  #docwrap { overflow: auto; padding: 18px 24px 120px; }
+  #doc { white-space: pre-wrap; word-break: break-word; font: 19px/1.9 var(--font-deva); margin: 0; max-width: 880px; }
+  #doc:empty::before { content: "Load a UTF-8 text file to begin."; color: var(--muted); font: 15px/1.5 var(--font-ui); }
+  .blk { display: inline; }
+  mark { border-radius: 3px; padding: 1px 0; color: inherit; }
+  mark.verse, mark.typo { font-family: var(--font-verse); }
+  mark.verse { background: var(--verse); box-shadow: 0 0 0 1px var(--verse-ink) inset; }
+  mark.uncertain { background: var(--uncertain); box-shadow: 0 0 0 1px var(--uncertain-ink) inset; }
+  mark.typo { background: var(--typo); box-shadow: 0 0 0 1px var(--typo-ink) inset; }
+  u.ocr { text-decoration: underline wavy var(--ocr); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+  mark.flash { outline: 2px solid var(--focus); }
+  mark[data-source="detector"] { border-bottom: 2px dotted var(--accent); }
+  #verses { overflow: auto; max-height: 34vh; margin: 0; padding: 0 8px 8px; list-style: none; font-size: 12.5px; border-bottom: 1px solid var(--line); }
+  #verses li, #history li { content-visibility: auto; contain-intrinsic-size: auto 30px; } /* off-screen rows skip layout */
+  #verses li { padding: 5px 6px; border-bottom: 1px solid var(--line); cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; gap: 0 8px; }
+  #verses li:hover { background: var(--bg); }
+  #verses .snip { color: var(--muted); font-family: var(--font-verse); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .badge { font-size: 10.5px; padding: 0 5px; border-radius: 8px; background: var(--line); color: var(--muted); align-self: center; }
+  .badge.detector { background: var(--accent); color: #fff; }
+  aside { border-left: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+  aside h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 14px 6px; }
+  .legend { padding: 0 14px 8px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 12px; }
+  .legend span { padding: 0 6px; border-radius: 3px; }
+  #history { flex: 1; overflow: auto; margin: 0; padding: 0 8px 12px; list-style: none; font-size: 12.5px; }
+  #history li { padding: 6px 6px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; cursor: pointer; }
+  #history li:hover { background: var(--bg); }
+  #history li.undone { opacity: .45; text-decoration: line-through; }
+  #history .snip { grid-column: 1 / -1; color: var(--muted); font-family: var(--font-deva); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #history time { color: var(--muted); }
+  .keys { padding: 8px 14px 14px; font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); }
+  kbd { font: 11.5px ui-monospace, Menlo, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); color: var(--ink); }
+  #menu { position: fixed; z-index: 10; display: none; min-width: 190px; background: var(--menu); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 4px; font-size: 14px; }
+  #menu button { display: flex; justify-content: space-between; width: 100%; border: 0; background: none; padding: 7px 10px; text-align: left; border-radius: 5px; }
+  #menu button:hover { background: var(--bg); }
+  #menu kbd { margin-left: 16px; }
+  #toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.show { opacity: 1; }
+  @media (max-width: 760px) { main { grid-template-columns: 1fr; } aside { border-left: 0; border-top: 1px solid var(--line); max-height: 40vh; } #docwrap { padding: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Verse tagger</h1>
+  <label class="btn">Open text… <input id="file" type="file" accept=".txt,text/plain"></label>
+  <label class="btn">Import tags… <input id="importfile" type="file" accept=".jsonl,.json"></label>
+  <button id="undo" title="Undo (Ctrl/Cmd+Z)">Undo</button>
+  <button id="redo" title="Redo (Ctrl/Cmd+Shift+Z)">Redo</button>
+  <button id="export" class="primary" title="Export (Ctrl/Cmd+S)">Export…</button>
+  <span class="stats" id="stats"></span>
+</header>
+<main>
+  <div id="docwrap"><pre id="doc" tabindex="0"></pre></div>
+  <aside>
+    <h2>Legend</h2>
+    <div class="legend"><span style="background:var(--verse)">verse</span><span style="background:var(--typo)">typo verse</span><span style="background:var(--uncertain)">uncertain</span><span style="border-bottom:2px dotted var(--accent)">detector</span><span style="text-decoration:underline wavy var(--ocr)">suspect syllable</span></div>
+    <h2>Verses <span id="versecount"></span></h2>
+    <ol id="verses"></ol>
+    <h2>Edit history <span id="histcount"></span></h2>
+    <ol id="history"></ol>
+    <div class="keys">
+      Select text, then <kbd>V</kbd> verse · <kbd>T</kbd> typo verse (verse with OCR errors) · <kbd>U</kbd> uncertain · <kbd>⌫</kbd> remove tag · right-click for the menu<br>
+      <kbd>Ctrl/⌘ Z</kbd> undo · <kbd>Ctrl/⌘ ⇧ Z</kbd> redo · <kbd>Ctrl/⌘ S</kbd> export · click a history row to jump to it
+    </div>
+  </aside>
+</main>
+<div id="menu" role="menu">
+  <button data-act="verse">Tag as verse <kbd>V</kbd></button>
+  <button data-act="typo">Tag as typo verse <kbd>T</kbd></button>
+  <button data-act="uncertain">Tag as uncertain <kbd>U</kbd></button>
+  <button data-act="remove">Remove tag <kbd>⌫</kbd></button>
+</div>
+<div id="toast"></div>
+<script id="embedded-text" type="application/json">null</script>
+<script id="embedded-meta" type="application/json">null</script>
+<script id="embedded-tags" type="application/json">null</script>
+<script>
+"use strict";
+// ---------- state ----------
+const state = { text: null, textId: null, meta: null, events: [], cursor: 0, discarded: [] };
+// `events` is append-only; `cursor` is how many events are live (undo moves it back,
+// a new action moves the undone tail into `discarded` so nothing is ever lost).
+
+const $ = (id) => document.getElementById(id);
+const doc = $("doc"), menu = $("menu"), hist = $("history");
+
+// ---------- code-point offsets (OFF-2): DOM works in UTF-16, we store code points ----------
+// Index built once per text: for BMP-only text (all Devanagari) both maps are the identity;
+// otherwise `u16Of[cp]` is a prefix table and utf16ToCp is a binary search over it. O(1)/O(log n),
+// so whole books with thousands of tags render without rescanning the text.
+let offsetIndex = { text: null, bmp: true, u16Of: null };
+function indexFor(text) {
+  if (offsetIndex.text === text) return offsetIndex;
+  const bmp = !/[\uD800-\uDFFF]/.test(text); let u16Of = null;
+  if (!bmp) { const a = []; for (let i = 0; i < text.length; i++) { a.push(i); const c = text.charCodeAt(i); if (c >= 0xD800 && c <= 0xDBFF) i++; } a.push(text.length); u16Of = Uint32Array.from(a); }
+  offsetIndex = { text, bmp, u16Of }; return offsetIndex;
+}
+function utf16ToCp(text, u16) {
+  const ix = indexFor(text); if (ix.bmp) return u16;
+  let lo = 0, hi = ix.u16Of.length - 1; while (lo < hi) { const mid = (lo + hi) >> 1; if (ix.u16Of[mid] < u16) lo = mid + 1; else hi = mid; } return lo;
+}
+function cpToUtf16(text, cp) { const ix = indexFor(text); return ix.bmp ? cp : ix.u16Of[cp]; }
+function sliceCp(text, s, e) { return text.slice(cpToUtf16(text, s), cpToUtf16(text, e)); }
+function cpLength(text) { return utf16ToCp(text, text.length); }
+
+async function textId(text) {
+  if (crypto.subtle) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  let h = 0; for (let i = 0; i < text.length; i++) h = (h * 31 + text.charCodeAt(i)) >>> 0; return "fnv" + h;
+}
+
+// ---------- derive tags from the live events ----------
+// Tags never overlap (a new tag replaces what it overlaps; a removal deletes what it overlaps),
+// so they are kept sorted by start and overlaps are found by binary search: O(events · log n).
+function firstEndingAfter(tags, pos) { let lo = 0, hi = tags.length; while (lo < hi) { const m = (lo + hi) >> 1; if (tags[m].end <= pos) lo = m + 1; else hi = m; } return lo; }
+function liveTags() {
+  const tags = [];
+  for (let i = 0; i < state.cursor; i++) {
+    const ev = state.events[i];
+    const a = firstEndingAfter(tags, ev.start); let b = a; while (b < tags.length && tags[b].start < ev.end) b++;
+    if (ev.action === "tag") tags.splice(a, b - a, { start: ev.start, end: ev.end, label: ev.label, eventId: ev.id, source: ev.source || "human", detail: ev.detail || null });
+    else if (ev.action === "remove") tags.splice(a, b - a);
+  }
+  return tags;
+}
+const tagKey = (t) => `${t.start}:${t.end}:${t.label}:${t.eventId}`;
+
+// ---------- rendering (blocked: an edit re-renders only the blocks it touches) ----------
+const BLOCK_U16 = 4000; // target block size; blocks end at a newline so lines are never split
+let blocks = [], shownTags = [];
+function buildBlocks(text) {
+  blocks = []; let s = 0;
+  while (s < text.length) { let e = Math.min(text.length, s + BLOCK_U16); if (e < text.length) { const nl = text.indexOf("\n", e); e = nl < 0 ? text.length : nl + 1; } blocks.push({ s, e }); s = e; }
+}
+function blockAt(u16) { let lo = 0, hi = blocks.length - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (blocks[m].s <= u16) lo = m; else hi = m - 1; } return lo; }
+function markTitle(t) {
+  const d = t.detail, head = `${t.label === "typo" ? "typo verse" : t.label} (${t.source}) [${t.start}, ${t.end})`;
+  if (!d) return head;
+  if (d.edits != null) return `${head} · ${d.metre_id} · ${d.edits} OCR edit(s)\nexpected ${(d.expected_lg || []).join(" ")}\nobserved ${(d.observed_lg || []).join(" ")}` +
+    (d.suspects || []).map(x => `\n  pāda ${x.pada}: ${x.kind}${x.syllable ? " at syllable " + x.syllable : ""} — ${x.text}`).join("");
+  return `${head} · ${d.metre_id || ""} · posterior ${d.posterior} · ${d.lg_full || ""}`;
+}
+function appendWithSuspects(m, t, ts, te) { // wavy-underline the syllables the detector suspects (OCR)
+  const text = state.text, spans = ((t.detail && t.detail.suspects) || [])
+    .map(x => [Math.max(cpToUtf16(text, x.start), ts), Math.min(cpToUtf16(text, x.end), te), x]).filter(([a, b]) => a < b).sort((x, y) => x[0] - y[0]);
+  let pos = ts;
+  for (const [a, b, x] of spans) {
+    if (a < pos) continue;
+    if (a > pos) m.appendChild(document.createTextNode(text.slice(pos, a)));
+    const u = document.createElement("u"); u.className = "ocr"; u.title = `${x.kind}${x.syllable ? " · syllable " + x.syllable : ""} · pāda ${x.pada}`;
+    u.textContent = text.slice(a, b); m.appendChild(u); pos = b;
+  }
+  if (pos < te) m.appendChild(document.createTextNode(text.slice(pos, te)));
+}
+function fillBlock(el, b, tags) {
+  const text = state.text; el.textContent = "";
+  const frag = document.createDocumentFragment(); let pos = b.s;
+  for (let i = firstEndingAfter(tags, utf16ToCp(text, b.s)); i < tags.length; i++) {
+    const t = tags[i], ts = Math.max(cpToUtf16(text, t.start), b.s), te = Math.min(cpToUtf16(text, t.end), b.e);
+    if (ts >= b.e) break;
+    if (ts > pos) frag.appendChild(document.createTextNode(text.slice(pos, ts)));
+    const m = document.createElement("mark"); m.className = t.label; m.dataset.start = t.start; m.dataset.end = t.end;
+    m.dataset.source = t.source; m.title = markTitle(t); appendWithSuspects(m, t, ts, te); frag.appendChild(m); pos = te;
+  }
+  if (pos < b.e) frag.appendChild(document.createTextNode(text.slice(pos, b.e)));
+  el.appendChild(frag);
+}
+function render(full) {
+  const text = state.text;
+  if (text == null) { doc.textContent = ""; $("stats").textContent = ""; renderHistory(); return; }
+  const tags = liveTags();
+  if (full || doc.children.length !== blocks.length) {
+    doc.textContent = ""; const frag = document.createDocumentFragment();
+    blocks.forEach((b, i) => { const el = document.createElement("span"); el.className = "blk"; el.dataset.i = i; fillBlock(el, b, tags); frag.appendChild(el); });
+    doc.appendChild(frag);
+  } else { // re-render only blocks touched by tags that appeared or disappeared
+    const before = new Set(shownTags.map(tagKey)), after = new Set(tags.map(tagKey)), dirty = new Set();
+    for (const t of shownTags) if (!after.has(tagKey(t))) for (let i = blockAt(cpToUtf16(text, t.start)); i <= blockAt(cpToUtf16(text, t.end) - 1); i++) dirty.add(i);
+    for (const t of tags) if (!before.has(tagKey(t))) for (let i = blockAt(cpToUtf16(text, t.start)); i <= blockAt(cpToUtf16(text, t.end) - 1); i++) dirty.add(i);
+    for (const i of dirty) fillBlock(doc.children[i], blocks[i], tags);
+  }
+  shownTags = tags;
+  const n = cpLength(text), count = (l) => tags.reduce((k, t) => k + (t.label === l), 0);
+  $("stats").textContent = `${count("verse").toLocaleString()} verses · ${count("typo").toLocaleString()} typo · ${count("uncertain").toLocaleString()} uncertain · ${n.toLocaleString()} code points`;
+  $("undo").disabled = state.cursor === 0; $("redo").disabled = state.cursor === state.events.length;
+  renderVerses(tags); renderHistory();
+}
+
+const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+function renderVerses(tags) {
+  $("versecount").textContent = tags.length ? `(${tags.length.toLocaleString()})` : "";
+  $("verses").innerHTML = tags.map((t, i) => {
+    const badge = t.source !== "detector" ? "human" : t.detail && t.detail.edits != null ? `typo · ${t.detail.edits} edit${t.detail.edits > 1 ? "s" : ""}`
+      : `detector ${t.detail && t.detail.posterior != null ? Math.round(t.detail.posterior * 100) + "%" : ""}`;
+    return `<li data-s="${t.start}" data-e="${t.end}"><span>${i + 1}. ${esc(t.label)}</span><span class="snip">${esc(sliceCp(state.text, t.start, Math.min(t.end, t.start + 50)))}</span><span class="badge ${esc(t.source)}">${badge}</span></li>`;
+  }).join("");
+}
+$("verses").addEventListener("click", (e) => { const li = e.target.closest("li"); if (li) jumpTo(+li.dataset.s, +li.dataset.e); });
+
+const HISTORY_SHOWN = 300; // the full history is always kept and exported; only the tail is listed
+const timeFmt = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+function renderHistory() {
+  $("histcount").textContent = state.events.length ? `(${state.cursor}/${state.events.length})` : "";
+  const from = Math.max(0, state.events.length - HISTORY_SHOWN);
+  hist.innerHTML = (from ? `<li class="undone" style="cursor:default">${from.toLocaleString()} earlier events not listed</li>` : "") +
+    state.events.slice(from).map((ev, k) => {
+      const i = from + k, what = (ev.action === "tag" ? `tag ${ev.label}` : "remove tag") + (ev.source === "detector" ? " (detector)" : "");
+      return `<li data-s="${ev.start}" data-e="${ev.end}"${i >= state.cursor ? ' class="undone"' : ""}><span>${esc(what)} [${ev.start}, ${ev.end})</span><time>${ev.source === "detector" && ev.seedRef != null ? "detector" : esc(timeFmt.format(new Date(ev.ts)))}</time><span class="snip">${esc(sliceCp(state.text, ev.start, Math.min(ev.end, ev.start + 60)))}</span></li>`;
+    }).join("");
+  requestAnimationFrame(() => { hist.scrollTop = hist.scrollHeight; }); // after paint: no forced synchronous layout
+}
+hist.addEventListener("click", (e) => { const li = e.target.closest("li[data-s]"); if (li) jumpTo(+li.dataset.s, +li.dataset.e); });
+
+function jumpTo(start, end) {
+  const b = doc.children[blockAt(cpToUtf16(state.text, start))];
+  const el = b && Array.from(b.querySelectorAll("mark")).find(m => +m.dataset.start <= start && +m.dataset.end >= end);
+  if (el) { el.scrollIntoView({ block: "center" }); el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1200); return; }
+  const a = locate(cpToUtf16(state.text, start)), z = locate(cpToUtf16(state.text, end)); if (!a || !z) return;
+  const r = document.createRange(); r.setStart(a.node, a.offset); r.setEnd(z.node, z.offset);
+  const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+  a.node.parentElement.scrollIntoView({ block: "center" });
+}
+
+function locate(u16) { // text node + offset for a UTF-16 position inside #doc
+  const bi = blockAt(u16), el = doc.children[bi]; if (!el) return null;
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let acc = blocks[bi].s, node, last = null;
+  while ((node = walker.nextNode())) { if (acc + node.length >= u16) return { node, offset: u16 - acc }; acc += node.length; last = node; }
+  return last ? { node: last, offset: last.length } : null;
+}
+function u16Of(container, offset) { // UTF-16 position of a DOM point inside #doc
+  const host = container.nodeType === 3 ? container.parentElement : container;
+  const blk = host === doc ? doc.children[Math.min(offset, doc.children.length - 1)] : host.closest(".blk");
+  if (!blk) return null;
+  if (host === doc) return offset >= doc.children.length ? state.text.length : blocks[+blk.dataset.i].s;
+  const pre = document.createRange(); pre.selectNodeContents(blk); pre.setEnd(container, offset);
+  return blocks[+blk.dataset.i].s + pre.toString().length;
+}
+
+// ---------- selection → code-point interval ----------
+function selectionInterval() {
+  const sel = getSelection(); if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return null;
+  const range = sel.getRangeAt(0); if (!doc.contains(range.startContainer) || !doc.contains(range.endContainer)) return null;
+  const startU16 = u16Of(range.startContainer, range.startOffset), endU16 = u16Of(range.endContainer, range.endOffset);
+  if (startU16 == null || endU16 == null) return null;
+  let s = utf16ToCp(state.text, startU16), e = utf16ToCp(state.text, endU16);
+  while (s < e && /\s/.test(sliceCp(state.text, s, s + 1))) s++;   // trim whitespace, never content
+  while (e > s && /\s/.test(sliceCp(state.text, e - 1, e))) e--;
+  return e > s ? { start: s, end: e } : null;
+}
+
+function caretInterval() { // for "remove" with a collapsed caret: the tag under it
+  const sel = getSelection(); if (!sel || sel.rangeCount === 0) return null;
+  let node = sel.getRangeAt(0).startContainer; node = node.nodeType === 3 ? node.parentElement : node;
+  const m = node && node.closest ? node.closest("mark") : null; return m ? { start: +m.dataset.start, end: +m.dataset.end } : null;
+}
+
+// ---------- events (QC-2: append-only, autosaved) ----------
+function record(action, start, end, label, extra, batch) {
+  if (state.cursor < state.events.length) { // keep the undone tail in the log, marked discarded
+    state.discarded = state.discarded.concat(state.events.splice(state.cursor).map(ev => ({ ...ev, discarded: true })));
+  }
+  state.events.push({ id: `e${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, ts: new Date().toISOString(),
+                      action, start, end, label: label || null, text: sliceCp(state.text, start, end), source: "human", ...(extra || {}) });
+  state.cursor = state.events.length; if (!batch) { save(); render(); }
+}
+function tag(label) {
+  if (state.text == null) return toast("Load a text first");
+  const iv = selectionInterval(); if (!iv) return toast("Select some text first");
+  record("tag", iv.start, iv.end, label); getSelection().removeAllRanges(); toast(`Tagged as ${label}`);
+}
+function removeTag() {
+  if (state.text == null) return;
+  const iv = selectionInterval() || caretInterval(); if (!iv) return toast("Select or click inside a tag");
+  if (!liveTags().some(t => t.start < iv.end && t.end > iv.start)) return toast("No tag there");
+  record("remove", iv.start, iv.end); getSelection().removeAllRanges(); toast("Tag removed");
+}
+function undo() { if (state.cursor > 0) { state.cursor--; save(); render(); toast("Undone"); } }
+function redo() { if (state.cursor < state.events.length) { state.cursor++; save(); render(); toast("Redone"); } }
+
+// Detector seed events are stored as references ({r: i}) into the page's embedded seed, so
+// autosave stays small even for books with 10,000 detected verses. The key includes a
+// signature of the seed, so a page rebuilt from a different detector run never misreads them.
+let seedEvents = [], seedSig = "";
+function storageKey() { return "padya-tagger:" + state.textId + (seedSig ? ":" + seedSig : ""); }
+let saveWarned = false;
+function packEvent(ev) { return ev.seedRef != null && !ev.discarded ? { r: ev.seedRef } : ev; }
+function unpackEvent(ev) { return ev && ev.r != null ? seedEvents[ev.r] : ev; }
+function save() {
+  try { localStorage.setItem(storageKey(), JSON.stringify({ events: state.events.map(packEvent), cursor: state.cursor,
+                                                           discarded: state.discarded, seedSig })); }
+  catch (e) { if (!saveWarned) { saveWarned = true; toast("Autosave unavailable here (storage full or blocked); use Export… to keep your work"); } }
+}
+function restore() {
+  const keys = [storageKey(), "padya-tagger:" + state.textId]; // the second is the pre-compaction key (full events)
+  for (const key of keys) {
+    try {
+      const raw = localStorage.getItem(key); if (!raw) continue;
+      const saved = JSON.parse(raw);
+      if (saved.events.some(ev => ev && ev.r != null) && saved.seedSig !== seedSig) continue;
+      state.events = saved.events.map(unpackEvent).filter(Boolean); state.cursor = Math.min(saved.cursor ?? state.events.length, state.events.length);
+      state.discarded = saved.discarded || []; return true;
+    } catch (e) { /* unreadable entry: ignore it and fall back to the seed */ }
+  }
+  return false;
+}
+
+// ---------- load / import / export ----------
+async function loadText(text, meta, seed) {
+  state.text = text.replace(/\r\n/g, "\n"); state.meta = meta || {}; state.textId = await textId(state.text);
+  indexFor(state.text); buildBlocks(state.text); shownTags = [];
+  seedEvents = buildSeed(Array.isArray(seed) ? seed : []);
+  seedSig = seedEvents.length ? (await textId(seedEvents.map(e => `${e.start},${e.end}`).join(";"))).slice(0, 16) : "";
+  state.events = []; state.cursor = 0; state.discarded = [];
+  const restored = restore();
+  if (!restored) { state.events = seedEvents.slice(); state.cursor = state.events.length; }
+  render(true);
+  if (restored) toast(`Loaded; ${state.events.length.toLocaleString()} saved event(s) restored`);
+  else toast(seedEvents.length ? `Loaded with ${seedEvents.length.toLocaleString()} detected verse(s); review and correct them` : "Loaded");
+}
+function buildSeed(records) { // embedded detector output → seed events (INV-1 checked), never stored in full
+  const n = cpLength(state.text), out = [], ts = new Date(0).toISOString();
+  records.forEach((r) => {
+    const start = r.start, end = r.end; if (!Number.isInteger(start) || !Number.isInteger(end) || end <= start || end > n) return;
+    if (r.text != null && sliceCp(state.text, start, end) !== r.text) return;
+    out.push({ id: `s${out.length}`, ts, action: "tag", start, end, label: r.label || "verse", text: r.text ?? sliceCp(state.text, start, end),
+               ...detectorRecord(r), seedRef: out.length });
+  });
+  return out;
+}
+function detectorRecord(r) { // a verses.jsonl record from the detector (schema 4.x)
+  return { source: "detector", detail: { verse_id: r.verse_id || r.suspect_id || null, posterior: r.arc_posterior ?? r.posterior ?? null, lg_full: r.lg_full || null,
+           variant: r.variant || null, metre_id: r.metre_id || null, detector_version: r.detector_version || null,
+           ...(r.edits != null ? { edits: r.edits, expected_lg: r.expected_lg || null, observed_lg: r.observed_lg || null, suspects: r.suspect_syllables || [] } : {}) } };
+}
+function seedTags(records) { // pre-load detector verses as events; returns how many were accepted (INV-1 checked)
+  let n = 0;
+  for (const r of records) {
+    const start = r.start, end = r.end; if (!Number.isInteger(start) || !Number.isInteger(end) || end <= start || end > cpLength(state.text)) continue;
+    if (r.text != null && sliceCp(state.text, start, end) !== r.text) continue;
+    record("tag", start, end, r.label || "verse", "arc_posterior" in r || r.source === "detector" ? detectorRecord(r) : null, true); n++;
+  }
+  save(); render(); // one save and one render for the whole batch
+  return n;
+}
+$("file").onchange = async (e) => { const f = e.target.files[0]; if (!f) return; loadText(await f.text(), { file: f.name, size: f.size }); e.target.value = ""; };
+$("importfile").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return; if (state.text == null) { toast("Load the text first"); e.target.value = ""; return; }
+  const lines = (await f.text()).split("\n").filter(Boolean).map(l => JSON.parse(l));
+  const n = seedTags(lines);
+  toast(`Imported ${n} of ${lines.length} tag(s); mismatching text was skipped`); e.target.value = "";
+};
+function download(name, content, type) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([content], { type })); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function exportAll() {
+  if (state.text == null) return toast("Nothing to export");
+  const base = (state.meta.file || "text").replace(/\.txt$/, ""); const tags = liveTags();
+  const common = { source_sha256: state.textId, offset_unit: "unicode_codepoint", tagger: "verse_tagger.html v1" };
+  download(`${base}.annotations.jsonl`, tags.map(t => JSON.stringify({ ...common, start: t.start, end: t.end, label: t.label, text: sliceCp(state.text, t.start, t.end), event_id: t.eventId, source: t.source, detector: t.detail })).join("\n") + "\n", "application/jsonl");
+  const all = state.events.map((ev, i) => ({ ...common, ...ev, live: i < state.cursor })).concat(state.discarded.map(ev => ({ ...common, ...ev, live: false })));
+  download(`${base}.events.jsonl`, all.map(e => JSON.stringify(e)).join("\n") + "\n", "application/jsonl");
+  let out = "", pos = 0; // marked copy: only « » (verse) / ‹ › (typo verse) / ¿ ? (uncertain) inserted
+  const MARKS = { verse: ["«", "»"], typo: ["‹", "›"], uncertain: ["¿", "?"] };
+  for (const t of tags) { const [o, c] = MARKS[t.label] || MARKS.uncertain; out += sliceCp(state.text, pos, t.start) + o + sliceCp(state.text, t.start, t.end) + c; pos = t.end; }
+  out += sliceCp(state.text, pos, cpLength(state.text));
+  download(`${base}.marked.txt`, out, "text/plain;charset=utf-8");
+  toast(`Exported ${tags.length} tag(s), ${all.length} event(s), marked copy`);
+}
+
+// ---------- context menu & keys ----------
+doc.addEventListener("contextmenu", (e) => {
+  if (state.text == null) return; e.preventDefault();
+  menu.style.display = "block"; const w = menu.offsetWidth, h = menu.offsetHeight;
+  menu.style.left = Math.min(e.clientX, innerWidth - w - 8) + "px"; menu.style.top = Math.min(e.clientY, innerHeight - h - 8) + "px";
+});
+menu.addEventListener("click", (e) => { const b = e.target.closest("button"); const act = b ? b.dataset.act : null; hideMenu(); if (act === "verse") tag("verse"); else if (act === "typo") tag("typo"); else if (act === "uncertain") tag("uncertain"); else if (act === "remove") removeTag(); });
+function hideMenu() { menu.style.display = "none"; }
+addEventListener("mousedown", (e) => { if (!menu.contains(e.target)) hideMenu(); });
+addEventListener("scroll", hideMenu, true);
+addEventListener("keydown", (e) => {
+  const mod = e.metaKey || e.ctrlKey; const k = e.key.toLowerCase();
+  if (mod && k === "z") { e.preventDefault(); if (e.shiftKey) redo(); else undo(); return; }
+  if (mod && k === "y") { e.preventDefault(); redo(); return; }
+  if (mod && k === "s") { e.preventDefault(); exportAll(); return; }
+  if (mod || e.altKey || e.target.tagName === "INPUT") return;
+  if (k === "v") { e.preventDefault(); tag("verse"); }
+  else if (k === "u") { e.preventDefault(); tag("uncertain"); }
+  else if (k === "t") { e.preventDefault(); tag("typo"); }
+  else if (e.key === "Backspace" || e.key === "Delete") { e.preventDefault(); removeTag(); }
+  else if (e.key === "Escape") hideMenu();
+});
+$("undo").onclick = undo; $("redo").onclick = redo; $("export").onclick = exportAll;
+let toastTimer; function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1600); }
+
+// ---------- embedded text (QC-4: escaped JSON, never raw insertion) ----------
+(function init() {
+  const emb = JSON.parse($("embedded-text").textContent), meta = JSON.parse($("embedded-meta").textContent), tags = JSON.parse($("embedded-tags").textContent);
+  if (typeof emb === "string") loadText(emb, meta || {}, tags);
+})();
+</script>
+</body>
+</html>

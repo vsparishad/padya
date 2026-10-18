@@ -1,0 +1,13 @@
+id: T12
+title: non-BMP characters and combining marks around a verse
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "𑀅𑀢𑁆𑀭 क़ुरान॒ इति । मा निषाद प्रतिष्ठां त्वमगमः शाश्वतीः समाः । यत्क्रौञ्चमिथुनादेकमवधीः काममोहितम् ॥"
+expect:
+  verse_count: 1
+  verses:
+    - {text_starts: "मा निषाद", text_ends: "काममोहितम्", lg_full: "GLGGLGGL LLGGLGLG GGLLLGGL LLGGLGLG"}
+  check_utf16: true
+  regions_partition: true

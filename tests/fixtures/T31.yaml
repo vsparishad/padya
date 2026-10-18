@@ -1,0 +1,10 @@
+id: T31
+title: same-length text with one forbidden odd-pāda opening (2–4 = LLG)
+status: enabled
+tier: T
+profile: classical_strict
+features: {sc10: false, sc11: false, retrieval: off, language: off}
+text: "अय निजः परो वेति गणना लघुचेतसाम् उदारचरितानां तु वसुधैव कुटुम्बकम्"
+expect:
+  verse_count: 0
+  regions_partition: true

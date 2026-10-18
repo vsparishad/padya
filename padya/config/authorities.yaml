@@ -1,0 +1,44 @@
+# Seed copied verbatim from verse_detector_blueprint_v6.md 32.4.
+# Values are *initial*; change only via tools/tune.py or with owner agreement (§0.4).
+smrti:
+  manu:        {canonical: "मनुः", forms: ["मनुः", "मनुना", "मनौ", "मनुरपि", "मनुश्च", "मानवे"]}
+  yajnavalkya: {canonical: "याज्ञवल्क्यः", forms: ["याज्ञवल्क्यः", "याज्ञवल्क्येन", "याज्ञवल्क्ये", "याज्ञवल्क्योऽपि"]}
+  parasara:    {canonical: "पराशरः", forms: ["पराशरः", "पराशरेण", "पराशरे", "पराशरोऽपि"]}
+  vyasa:       {canonical: "व्यासः", forms: ["व्यासः", "व्यासेन", "व्यासे", "व्यासोऽपि"]}
+  yama:        {canonical: "यमः", forms: ["यमः", "यमेन", "यमे", "यमोऽपि"]}
+  satatapa:    {canonical: "शातातपः", forms: ["शातातपः", "शातातपेन", "शातातपे"]}
+  brhaspati:   {canonical: "बृहस्पतिः", forms: ["बृहस्पतिः", "बृहस्पतिना", "बृहस्पतौ", "बृहस्पतिरपि"]}
+  katyayana:   {canonical: "कात्यायनः", forms: ["कात्यायनः", "कात्यायनेन", "कात्यायने", "कात्यायनोऽपि"]}
+  harita:      {canonical: "हारीतः", forms: ["हारीतः", "हारीतेन", "हारीते"]}
+  devala:      {canonical: "देवलः", forms: ["देवलः", "देवलेन", "देवले"]}
+  angiras:     {canonical: "अङ्गिराः", forms: ["अङ्गिराः", "अङ्गिरसा", "अङ्गिरसि"]}
+  visnu:       {canonical: "विष्णुः", forms: ["विष्णुः", "विष्णुना", "विष्णौ"]}
+  narada:      {canonical: "नारदः", forms: ["नारदः", "नारदेन", "नारदे"]}
+  samvarta:    {canonical: "संवर्तः", forms: ["संवर्तः", "संवर्तेन", "संवर्ते"]}
+  atri:        {canonical: "अत्रिः", forms: ["अत्रिः", "अत्रिणा", "अत्रौ"]}
+  daksa:       {canonical: "दक्षः", forms: ["दक्षः", "दक्षेण", "दक्षे"]}
+  gautama:     {canonical: "गौतमः", forms: ["गौतमः", "गौतमेन", "गौतमे"]}
+  apastamba:   {canonical: "आपस्तम्बः", forms: ["आपस्तम्बः", "आपस्तम्बेन", "आपस्तम्बे"]}
+  vasistha:    {canonical: "वसिष्ठः", forms: ["वसिष्ठः", "वसिष्ठेन", "वसिष्ठे"]}
+  baudhayana:  {canonical: "बौधायनः", forms: ["बौधायनः", "बौधायनेन", "बौधायने"]}
+  sankha_likhita: {canonical: "शङ्खलिखितौ", forms: ["शङ्खलिखितौ", "शङ्खलिखिताभ्याम्", "शङ्खः", "लिखितः"]}
+purana:
+  bhavisya: {canonical: "भविष्यपुराणम्", forms: ["भविष्ये", "भविष्यपुराणे", "भविष्योत्तरे"]}
+  skanda:   {canonical: "स्कन्दपुराणम्", forms: ["स्कान्दे", "स्कन्दपुराणे"]}
+  garuda:   {canonical: "गरुडपुराणम्", forms: ["गारुडे", "गरुडपुराणे"]}
+  matsya:   {canonical: "मत्स्यपुराणम्", forms: ["मात्स्ये", "मत्स्यपुराणे"]}
+  padma:    {canonical: "पद्मपुराणम्", forms: ["पाद्मे", "पद्मपुराणे"]}
+  brahma:   {canonical: "ब्रह्मपुराणम्", forms: ["ब्राह्मे", "ब्रह्मपुराणे"]}
+  markandeya: {canonical: "मार्कण्डेयपुराणम्", forms: ["मार्कण्डेये", "मार्कण्डेयः"]}
+digest:   # via_digest when in locative before a primary
+  hemadri:        {canonical: "हेमाद्रिः", forms: ["हेमाद्रौ", "हेमाद्रिः"]}
+  madhaviya:      {canonical: "पराशरमाधवीयम्", forms: ["माधवीये", "माधवः", "माधवमते"]}
+  mitaksara:      {canonical: "मिताक्षरा", forms: ["मिताक्षरायाम्"]}
+  smrticandrika:  {canonical: "स्मृतिचन्द्रिका", forms: ["स्मृतिचन्द्रिकायाम्"]}
+  kaladarsa:      {canonical: "कालादर्शः", forms: ["कालादर्शे"]}
+  madanaratna:    {canonical: "मदनरत्नम्", forms: ["मदनरत्ने"]}
+  ratnakara:      {canonical: "कृत्यरत्नाकरः", forms: ["रत्नाकरे"]}
+  kaustubha:      {canonical: "कौस्तुभः", forms: ["कौस्तुभे"]}
+  nirnayamrta:    {canonical: "निर्णयामृतम्", forms: ["निर्णयामृते"]}
+  dipika:         {canonical: "दीपिका", forms: ["दीपिकायाम्", "दीपिकोक्तेः"]}
+  divodasa:       {canonical: "दिवोदासः", forms: ["दिवोदासः", "दिवोदासेन", "दिवोदासोदाहृत"]}
